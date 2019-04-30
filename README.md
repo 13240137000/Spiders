@@ -1,6 +1,8 @@
 # Spiders
 
-Eevment
+Environment：
+    1. python 3.6
+    2. scrapy 1.6.0
 
 For run the spiders as below:
   1. config your download data path in settings.py
