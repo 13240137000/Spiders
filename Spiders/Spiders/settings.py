@@ -117,3 +117,13 @@ LOG_FILE_PATH = "C:\\Jack\\SpidersLogs\\scrapy_{}_{}_{}.log".format(TODAY.year, 
 
 LOG_LEVEL = "WARNING"
 LOG_FILE = LOG_FILE_PATH
+
+# Email SETTINGS
+
+MAIL_FROM = "your sender address"
+MAIL_HOST = "your smtp server"
+MAIL_PORT = "your smtp port"
+MAIL_USER = "your smtp account"
+MAIL_PASS = "your smtp password"
+MAIL_TLS = False
+MAIL_SSL = False

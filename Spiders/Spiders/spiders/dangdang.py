@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import logging
-from Spiders.common.email import EmailHelper
 from Spiders.items import DangDangItem
 import datetime
+from scrapy.utils.project import get_project_settings
+from scrapy.mail import MailSender
 
 
 class DangDangSpider(scrapy.Spider):
@@ -36,9 +37,11 @@ class DangDangSpider(scrapy.Spider):
     def start_requests(self):
 
         logging.log(logging.INFO, "Spider started")
-        email = EmailHelper()
-        body = 'Start datetime is {}'.format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-        email.send_text_email('xxx@xxx.com', 'spider started', body)
+
+        # body = 'Start datetime is {}'.format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        # settings = get_project_settings()
+        # mailer = MailSender.from_settings(settings)
+        # mailer.send(to=["receiver address"], subject="start spider", body=body)
 
         url = self.base_url.format(self.__protocol, self.__port, self.__keyword)
         yield scrapy.Request(url=url, callback=self.parse)
@@ -99,6 +102,3 @@ class DangDangSpider(scrapy.Spider):
 
     def close(self, reason):
         logging.log(logging.INFO, "Spider closed")
-        email = EmailHelper()
-        body = 'End datetime is {}'.format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-        email.send_text_email('xxx@xxx.com', 'spider ended', body)
