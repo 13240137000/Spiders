@@ -41,6 +41,8 @@ class DangDangSpider(scrapy.Spider):
 
         try:
 
+            log.msg("Your has been enter callback method.", level=log.INFO)
+
             extract_collection = {
                 "root": "div[id='search_nature_rg'] > ul.bigimg > li",
                 "title": "p.name a::attr(title)",
@@ -76,6 +78,8 @@ class DangDangSpider(scrapy.Spider):
             if next_request_link:
                 url = response.urljoin(next_request_link)
                 yield scrapy.Request(url=url, callback=self.parse)
+
+                log.msg("requested next page.", level=log.INFO)
 
         except Exception as error:
             log.msg(error, level=log.ERROR)

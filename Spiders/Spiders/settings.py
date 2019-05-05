@@ -10,6 +10,7 @@
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 import random
+import datetime
 
 BOT_NAME = 'Spiders'
 
@@ -106,3 +107,13 @@ ITEM_PIPELINES = {
 
 DOWNLOAD_DATA_PATH = "C:\\Jack\\SpidersDownloadData\\"
 DOWNLOAD_IMAGE_PATH = "C:\\Jack\\SpidersDownloadImage\\"
+
+# LOG SETTINGS
+
+TODAY = datetime.datetime.now()
+LOG_FILE_PATH = "spiders/logs/scrapy_{}_{}_{}.log".format(TODAY.year, TODAY.month, TODAY.day)
+
+# CRITICAL ERROR WARNING INFO DEBUG
+
+LOG_LEVEL = "WARNING"
+LOG_FILE = LOG_FILE_PATH
