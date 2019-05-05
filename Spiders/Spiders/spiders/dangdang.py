@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import scrapy
-from scrapy import log
+import logging
+from Spiders.common.email import EmailHelper
 from Spiders.items import DangDangItem
+import datetime
 
 
 class DangDangSpider(scrapy.Spider):
-
     name = 'dangdang'
     allowed_domains = ['dangdang.com']
 
@@ -34,14 +35,17 @@ class DangDangSpider(scrapy.Spider):
 
     def start_requests(self):
 
-        url = self.base_url.format(self.__protocol, self. __port, self.__keyword)
+        logging.log(logging.INFO, "Spider started")
+        email = EmailHelper()
+        body = 'Start datetime is {}'.format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        email.send_text_email('xxx@xxx.com', 'spider started', body)
+
+        url = self.base_url.format(self.__protocol, self.__port, self.__keyword)
         yield scrapy.Request(url=url, callback=self.parse)
 
     def parse(self, response):
 
         try:
-
-            log.msg("Your has been enter callback method.", level=log.INFO)
 
             extract_collection = {
                 "root": "div[id='search_nature_rg'] > ul.bigimg > li",
@@ -60,16 +64,27 @@ class DangDangSpider(scrapy.Spider):
 
             for el in response.css(extract_collection["root"]):
                 item = DangDangItem()
-                item["title"] = el.css(extract_collection["title"]).extract_first() if el.css(extract_collection["title"]).extract_first() is not None else ""
-                item["detail"] = el.css(extract_collection["detail"]).extract_first() if el.css(extract_collection["detail"]).extract_first() is not None else ""
-                item["now_price"] = el.css(extract_collection["now_price"]).extract_first() if el.css(extract_collection["now_price"]).extract_first() is not None else ""
-                item["pre_price"] = el.css(extract_collection["pre_price"]).extract_first() if el.css(extract_collection["pre_price"]).extract_first() is not None else ""
-                item["discount"] = el.css(extract_collection["discount"]).extract_first() if el.css(extract_collection["discount"]).extract_first() is not None else ""
-                item["author"] = el.css(extract_collection["author"]).extract_first() if el.css(extract_collection["author"]).extract_first() is not None else ""
-                item["publish"] = el.css(extract_collection["publish"]).extract_first() if el.css(extract_collection["publish"]).extract_first() is not None else ""
-                item["publish_date"] = el.css(extract_collection["publish_date"]).extract_first() if el.css(extract_collection["publish_date"]).extract_first() is not None else ""
-                item["star"] = el.css(extract_collection["star"]).extract_first() if el.css(extract_collection["star"]).extract_first() is not None else ""
-                item["comment"] = el.css(extract_collection["comment"]).extract_first() if el.css(extract_collection["comment"]).extract_first() is not None else ""
+
+                item["title"] = el.css(extract_collection["title"]).extract_first() if el.css(
+                    extract_collection["title"]).extract_first() is not None else ""
+                item["detail"] = el.css(extract_collection["detail"]).extract_first() if el.css(
+                    extract_collection["detail"]).extract_first() is not None else ""
+                item["now_price"] = el.css(extract_collection["now_price"]).extract_first() if el.css(
+                    extract_collection["now_price"]).extract_first() is not None else ""
+                item["pre_price"] = el.css(extract_collection["pre_price"]).extract_first() if el.css(
+                    extract_collection["pre_price"]).extract_first() is not None else ""
+                item["discount"] = el.css(extract_collection["discount"]).extract_first() if el.css(
+                    extract_collection["discount"]).extract_first() is not None else ""
+                item["author"] = el.css(extract_collection["author"]).extract_first() if el.css(
+                    extract_collection["author"]).extract_first() is not None else ""
+                item["publish"] = el.css(extract_collection["publish"]).extract_first() if el.css(
+                    extract_collection["publish"]).extract_first() is not None else ""
+                item["publish_date"] = el.css(extract_collection["publish_date"]).extract_first() if el.css(
+                    extract_collection["publish_date"]).extract_first() is not None else ""
+                item["star"] = el.css(extract_collection["star"]).extract_first() if el.css(
+                    extract_collection["star"]).extract_first() is not None else ""
+                item["comment"] = el.css(extract_collection["comment"]).extract_first() if el.css(
+                    extract_collection["comment"]).extract_first() is not None else ""
 
                 yield item
 
@@ -79,7 +94,11 @@ class DangDangSpider(scrapy.Spider):
                 url = response.urljoin(next_request_link)
                 yield scrapy.Request(url=url, callback=self.parse)
 
-                log.msg("requested next page.", level=log.INFO)
-
         except Exception as error:
-            log.msg(error, level=log.ERROR)
+            logging.log(logging.ERROR, error)
+
+    def close(self, reason):
+        logging.log(logging.INFO, "Spider closed")
+        email = EmailHelper()
+        body = 'End datetime is {}'.format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        email.send_text_email('xxx@xxx.com', 'spider ended', body)

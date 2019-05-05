@@ -111,7 +111,7 @@ DOWNLOAD_IMAGE_PATH = "C:\\Jack\\SpidersDownloadImage\\"
 # LOG SETTINGS
 
 TODAY = datetime.datetime.now()
-LOG_FILE_PATH = "spiders/logs/scrapy_{}_{}_{}.log".format(TODAY.year, TODAY.month, TODAY.day)
+LOG_FILE_PATH = "C:\\Jack\\SpidersLogs\\scrapy_{}_{}_{}.log".format(TODAY.year, TODAY.month, TODAY.day)
 
 # CRITICAL ERROR WARNING INFO DEBUG
 
