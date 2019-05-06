@@ -35,3 +35,8 @@ class DangDangItem(scrapy.Item):
     star = scrapy.Field()
 
     comment = scrapy.Field()
+
+    image_url = scrapy.Field()
+
+    images = scrapy.Field()
+

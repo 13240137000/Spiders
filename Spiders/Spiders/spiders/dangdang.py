@@ -44,7 +44,7 @@ class DangDangSpider(scrapy.Spider):
         # mailer.send(to=["receiver address"], subject="start spider", body=body)
 
         url = self.base_url.format(self.__protocol, self.__port, self.__keyword)
-        yield scrapy.Request(url=url, callback=self.parse)
+        yield scrapy.Request(url=url, meta={"download_time_out": 10}, callback=self.parse)
 
     def parse(self, response):
 
@@ -62,7 +62,8 @@ class DangDangSpider(scrapy.Spider):
                 "publish_date": "p.search_book_author > span:nth-of-type(2)::text",
                 "star": "p.search_star_line > span.search_star_black > span::attr(style)",
                 "comment": "p.search_star_line > a.search_comment_num::text",
-                "next_request": "div.paging > ul > li.next > a::attr(href)"
+                "next_request": "div.paging > ul > li.next > a::attr(href)",
+                "image_url": "a[class='pic'] img::attr(data-original)"
             }
 
             for el in response.css(extract_collection["root"]):
@@ -88,6 +89,8 @@ class DangDangSpider(scrapy.Spider):
                     extract_collection["star"]).extract_first() is not None else ""
                 item["comment"] = el.css(extract_collection["comment"]).extract_first() if el.css(
                     extract_collection["comment"]).extract_first() is not None else ""
+                item["image_url"] = el.css(extract_collection["image_url"]).extract_first() if el.css(
+                    extract_collection["image_url"]).extract_first() is not None else ""
 
                 yield item
 

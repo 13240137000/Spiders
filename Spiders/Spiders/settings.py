@@ -62,9 +62,9 @@ DEFAULT_REQUEST_HEADERS = {
 
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
-# SPIDER_MIDDLEWARES = {
-#    'Spiders.middlewares.SpidersSpiderMiddleware': 543,
-# }
+SPIDER_MIDDLEWARES = {
+   'Spiders.middlewares.SpidersSpiderMiddleware': 543,
+}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
@@ -81,8 +81,18 @@ DEFAULT_REQUEST_HEADERS = {
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'Spiders.pipelines.DangDangPipeline': 300,
+    'Spiders.pipelines.ImagesPipeline': 301,
+    'Spiders.pipelines.DangDangPipeline': 300
 }
+
+# IMAGES_THUMBS = {
+#     'small': (50, 50),
+#     'big': (200, 200),
+# }
+
+IMAGES_STORE = 'C:\\Jack\\SpidersDownloadImage\\'
+IMAGES_EXPIRES = 30
+
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -106,7 +116,6 @@ ITEM_PIPELINES = {
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 DOWNLOAD_DATA_PATH = "C:\\Jack\\SpidersDownloadData\\"
-DOWNLOAD_IMAGE_PATH = "C:\\Jack\\SpidersDownloadImage\\"
 
 # LOG SETTINGS
 
@@ -115,7 +124,7 @@ LOG_FILE_PATH = "C:\\Jack\\SpidersLogs\\scrapy_{}_{}_{}.log".format(TODAY.year, 
 
 # CRITICAL ERROR WARNING INFO DEBUG
 
-LOG_LEVEL = "WARNING"
+LOG_LEVEL = "INFO"
 LOG_FILE = LOG_FILE_PATH
 
 # Email SETTINGS

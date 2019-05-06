@@ -6,7 +6,10 @@
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 import json
+import scrapy
+from scrapy.exceptions import DropItem
 from scrapy.utils.project import get_project_settings
+from scrapy.pipelines.images import ImagesPipeline
 
 class SpidersPipeline(object):
     def process_item(self, item, spider):
@@ -18,7 +21,7 @@ class DangDangPipeline(object):
     file = None
     count = 1
 
-    def open_spider(self,spider):
+    def open_spider(self, spider):
 
         settings = get_project_settings()
         self.file = open(r"{}dangdang.txt".format(settings.get("DOWNLOAD_DATA_PATH")), "w", encoding="utf-8")
@@ -37,3 +40,17 @@ class DangDangPipeline(object):
 
         self.file.close()
         print("total downloaded record is {}".format(self.count - 1))
+
+
+class ImagesPipeline(ImagesPipeline):
+
+    def get_media_requests(self, item, info):
+        yield scrapy.Request(item['image_url'])
+
+    def item_completed(self, results, item, info):
+        image_paths = [x['path'] for ok, x in results if ok]
+        if not image_paths:
+            raise DropItem("Item contains no images")
+        return item
+
+
